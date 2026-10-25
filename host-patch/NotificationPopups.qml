@@ -54,6 +54,11 @@ PanelWindow {
     // are her voice: they float over her head, never through her.
     readonly property real roostClearance: position === "BottomRight" ? 112 * win.us : 0
 
+    // Jurai patch: the lamp — an animated light at the top tip of the
+    // spine the scrolls stem from. Header height reserved for it when
+    // the seat is BottomRight; zero elsewhere.
+    readonly property real lamp: position === "BottomRight" ? 30 * win.us : 0
+
     // Base breathing room off the screen corner, on top of the configurable
     // popup margin, so the toast column floats instead of sitting flush.
     readonly property real inset: 16 * win.us
@@ -93,7 +98,7 @@ PanelWindow {
     // The surface is as tall as its cards, but never shorter than a card that is
     // still leaving: the window clips, so collapsing to 1 px under the last toast
     // wiped its exit slide instead of letting it glide off the edge.
-    implicitHeight: Math.max(1, list.contentHeight, exitFloor)
+    implicitHeight: lamp + Math.max(1, list.contentHeight, exitFloor)
     // Height held for a leaving card, released once its exit has finished. This
     // must outlast the whole dismiss: the flicked card slides out over notifOut,
     // then the cards below wait that long and rise over durFastSpatial. Releasing
@@ -179,11 +184,60 @@ PanelWindow {
         onTriggered: if (win.popups.length === 0) win.mapped = false
     }
 
+    // Jurai patch: the lamp at the spine's tip — a breathing prism
+    // light at the top of the stack, on her side of the column. It
+    // lives only while the surface is mapped (she is speaking), so
+    // its breath costs nothing in an empty sky.
+    Item {
+        visible: win.lamp > 0
+        anchors.top: parent.top
+        anchors.right: parent.right
+        width: win.lamp
+        height: win.lamp
+
+        Rectangle {
+            anchors.centerIn: parent
+            width: 26 * win.us; height: 26 * win.us; radius: width / 2
+            color: "#A78BFA"
+            opacity: 0.16
+            SequentialAnimation on scale {
+                loops: Animation.Infinite
+                NumberAnimation { to: 1.3; duration: 1800; easing.type: Easing.InOutSine }
+                NumberAnimation { to: 0.9; duration: 1800; easing.type: Easing.InOutSine }
+            }
+        }
+        Rectangle {
+            anchors.centerIn: parent
+            width: 11 * win.us; height: 11 * win.us; radius: width / 2
+            color: "#22D3EE"
+            opacity: 0.55
+            SequentialAnimation on color {
+                loops: Animation.Infinite
+                ColorAnimation { to: "#A78BFA"; duration: 2200 }
+                ColorAnimation { to: "#F5B300"; duration: 2200 }
+                ColorAnimation { to: "#F43F5E"; duration: 2200 }
+                ColorAnimation { to: "#22D3EE"; duration: 2200 }
+            }
+            SequentialAnimation on opacity {
+                loops: Animation.Infinite
+                NumberAnimation { to: 0.9; duration: 1400; easing.type: Easing.InOutSine }
+                NumberAnimation { to: 0.45; duration: 1400; easing.type: Easing.InOutSine }
+            }
+        }
+        Rectangle {
+            anchors.centerIn: parent
+            width: 4.5 * win.us; height: 4.5 * win.us; radius: width / 2
+            color: "#FFFFFF"
+            opacity: 0.95
+        }
+    }
+
     ListView {
         id: list
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
+        anchors.topMargin: win.lamp
         height: contentHeight
         spacing: 14 * win.us
         interactive: false
