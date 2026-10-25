@@ -107,6 +107,8 @@ Item {
                 ? Qt.rgba(0.96, 0.25, 0.37, 0.30)
                 : root.mood === "HIGH"
                 ? Qt.rgba(0.96, 0.70, 0.0, 0.28)
+                : root.mood === "MEDIUM"
+                ? Qt.rgba(0.06, 0.85, 0.64, 0.26)
                 : Qt.rgba(0.13, 0.83, 0.93, 0.22)
         }
         Rectangle {
@@ -115,9 +117,9 @@ Item {
             width: 8; height: 8
             radius: 4
             gradient: Gradient {
-                GradientStop { position: 0.0; color: root.mood === "CRITICAL" ? "#F43F5E" : root.mood === "HIGH" ? "#F5B300" : "#22D3EE" }
-                GradientStop { position: 0.5; color: root.mood === "CRITICAL" ? "#F43F5E" : root.mood === "HIGH" ? "#F5B300" : "#A78BFA" }
-                GradientStop { position: 1.0; color: root.mood === "CRITICAL" ? "#F43F5E" : root.mood === "HIGH" ? "#F5B300" : "#F5B300" }
+                GradientStop { position: 0.0; color: root.mood === "CRITICAL" ? "#F43F5E" : root.mood === "HIGH" ? "#F5B300" : root.mood === "MEDIUM" ? "#10D9A3" : root.mood === "LOW" ? "#22D3EE" : "#22D3EE" }
+                GradientStop { position: 0.5; color: root.mood === "CRITICAL" ? "#F43F5E" : root.mood === "HIGH" ? "#F5B300" : root.mood === "MEDIUM" ? "#10D9A3" : root.mood === "LOW" ? "#22D3EE" : "#A78BFA" }
+                GradientStop { position: 1.0; color: root.mood === "CRITICAL" ? "#F43F5E" : root.mood === "HIGH" ? "#F5B300" : root.mood === "MEDIUM" ? "#10D9A3" : root.mood === "LOW" ? "#22D3EE" : "#F5B300" }
             }
             // The blink — a lid, on her own slow clock.
             transform: Scale {
