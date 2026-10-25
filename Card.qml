@@ -7,8 +7,10 @@
  * mono, and the burn along the foot — the scroll's remaining
  * life, spent while it waits. A CRITICAL scroll does not burn;
  * it waits, shivering faintly, for the captain's hand. The ✕
- * is the acknowledgment. The crow perches as the card's seal,
- * her prism eye rose while a critical waits.
+ * is the acknowledgment. The crow stands on the card's bottom
+ * border — the burn is her wire, prism-lit along the foot, and
+ * she perches at its end (v1.1, the captain's ruling: the bird
+ * and the bottom border she perches upon belong to this plugin).
  *
  * Priority themes are hers, from the Form Eighty: LOW cyan,
  * MEDIUM emerald, HIGH amber, CRITICAL rose. The freedesktop
@@ -125,31 +127,11 @@ Item {
             opacity: 0.85
         }
 
-        // The crow, perched as the card's seal; her eye takes
-        // the priority's mood. She is drawn at 128x116 in her
-        // own file; the seal slot scales her down whole.
-        Item {
-            anchors { right: parent.right; top: parent.top }
-            anchors.rightMargin: 2
-            anchors.topMargin: 1
-            width: 46 * root.us
-            height: 42 * root.us
-            clip: true
-            KasugaiCrow {
-                width: 128
-                height: 116
-                scale: 0.36 * root.us
-                transformOrigin: Item.TopLeft
-                mood: root._prio === "CRITICAL" ? "CRITICAL" : ""
-                opacity: 0.92
-            }
-        }
-
         Column {
             id: _col
             anchors { left: parent.left; right: parent.right; top: parent.top }
             anchors.leftMargin: 12 * root.us
-            anchors.rightMargin: 52 * root.us
+            anchors.rightMargin: 14 * root.us
             anchors.topMargin: 9 * root.us
             spacing: 4
 
@@ -195,7 +177,7 @@ Item {
             }
 
             Text {
-                width: parent.width
+                width: parent.width - 58 * root.us
                 visible: text.length > 0
                 text: root.notification ? (root.notification.body || "") : ""
                 color: Qt.rgba(1, 1, 1, 0.78)
@@ -263,14 +245,42 @@ Item {
             }
         }
 
-        // The burn — its remaining life, spent from the foot.
-        // A CRITICAL scroll does not burn.
+        // Her wire — the card's bottom border, prism-lit in the
+        // priority's color. It is always there at rest; the burn
+        // spends along it. A CRITICAL scroll does not burn.
+        Rectangle {
+            anchors { left: parent.left; bottom: parent.bottom }
+            height: 1
+            width: parent.width
+            color: root._theme
+            opacity: 0.35
+        }
         Rectangle {
             anchors { left: parent.left; bottom: parent.bottom }
             height: 2
             width: parent.width * root._life
             color: root._theme
             opacity: root._prio === "CRITICAL" ? 0.9 : 0.55
+        }
+
+        // The crow, standing on the wire at the foot's end; her
+        // eye takes the priority's mood. She is drawn at 128x116
+        // in her own file; the perch scales her down whole, feet
+        // on the bottom border, unclipped — she stands ON the
+        // card, not in it.
+        Item {
+            anchors { right: parent.right; bottom: parent.bottom }
+            width: 64 * root.us
+            height: 58 * root.us
+            KasugaiCrow {
+                width: 128
+                height: 116
+                scale: 0.5 * root.us
+                transformOrigin: Item.TopLeft
+                mood: root._prio === "CRITICAL" ? "CRITICAL"
+                     : root._prio === "HIGH" ? "HIGH" : ""
+                opacity: 0.95
+            }
         }
 
         // Clicking the plate runs the sender's default action.
