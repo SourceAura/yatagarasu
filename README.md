@@ -1,5 +1,7 @@
 # Yatagarasu
 
+> **Part of [Jurai](https://github.com/SourceAura/jurai-suite)** — a living desktop ecosystem by 0xSrcAura. This piece is one of its public doors.
+
 The Kasugai scroll, seated as a Ryoku notification card.
 
 Every notification arrives as a dispatch scroll: a dark glass
