@@ -1,0 +1,50 @@
+{
+  "schema": 1,
+  "id": "yatagarasu",
+  "category": "notifications",
+  "version": "1.0.0",
+  "destination": "ryoku/notifications/yatagarasu",
+  "files": [
+    {
+      "source": "Card.qml",
+      "destination": "Card.qml",
+      "sha256": "f3e742be714d12d0451bf24f6b5f6c9f531a9ab5f1ec17f99804a291ec940b1c",
+      "mode": "0644",
+      "size": 10283,
+      "install": true
+    },
+    {
+      "source": "KasugaiCrow.qml",
+      "destination": "KasugaiCrow.qml",
+      "sha256": "948fafe4edd39fe3fe80cd1c530c51e947148749e26d55338f5c758b384b5721",
+      "mode": "0644",
+      "size": 5334,
+      "install": true
+    },
+    {
+      "source": "LICENSE",
+      "destination": "LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "mode": "0644",
+      "size": 35149,
+      "install": true
+    },
+    {
+      "source": "README.md",
+      "destination": "README.md",
+      "sha256": "9eae8472c636f4b4fd7e7683294241bd8e5164141591969492b224db9afa9e1a",
+      "mode": "0644",
+      "size": 769,
+      "install": true
+    },
+    {
+      "source": "assets/preview.webp",
+      "destination": "assets/preview.webp",
+      "sha256": "e7f5c61a81a7684784db6e1bafef9f6475abb0758b22dc7037b9b3a625a5ceea",
+      "mode": "0644",
+      "size": 17604,
+      "install": false
+    }
+  ],
+  "license": "GPL-3.0-or-later"
+}
