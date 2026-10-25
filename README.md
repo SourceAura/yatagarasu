@@ -37,6 +37,10 @@ Actions the sender offered appear as a quiet row of chips.
 Clicking the plate runs the sender's default action. The x
 only ever dismisses.
 
+
+Her other half lives in the store as **Yatagarasu Roost** (plugins): the crow herself
+on the desktop, her eye wearing the last word. The scrolls are her voice; the roost is her.
+
 Part of the Jurai suite, by 0xSrcAura. Maintained by the
 author; updates ship as version bumps here and in the store.
 
