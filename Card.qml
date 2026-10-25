@@ -263,26 +263,6 @@ Item {
             opacity: root._prio === "CRITICAL" ? 0.9 : 0.55
         }
 
-        // The crow, standing on the wire at the foot's end; her
-        // eye takes the priority's mood. She is drawn at 128x116
-        // in her own file; the perch scales her down whole, feet
-        // on the bottom border, unclipped — she stands ON the
-        // card, not in it.
-        Item {
-            anchors { right: parent.right; bottom: parent.bottom }
-            width: 64 * root.us
-            height: 58 * root.us
-            KasugaiCrow {
-                width: 128
-                height: 116
-                scale: 0.5 * root.us
-                transformOrigin: Item.TopLeft
-                mood: root._prio === "CRITICAL" ? "CRITICAL"
-                     : root._prio === "HIGH" ? "HIGH" : ""
-                opacity: 0.95
-            }
-        }
-
         // Clicking the plate runs the sender's default action.
         TapHandler {
             onTapped: if (root.defaultAction) root.invokeAndDismiss(root.defaultAction)
