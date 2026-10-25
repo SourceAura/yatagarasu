@@ -2,7 +2,7 @@
   "schema": 1,
   "id": "yatagarasu-roost",
   "category": "plugins",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "destination": "ryoku/plugins/yatagarasu-roost",
   "files": [
     {
@@ -24,39 +24,39 @@
     {
       "source": "assets/preview-widget.png",
       "destination": "assets/preview-widget.png",
-      "sha256": "2bd669935493c4ed89a7bfab52ae7f57fd79035793fb8f453296ba623d519ed4",
+      "sha256": "803df33eb69f0cd09e4859d5163fc9424b44b9a16c6e7535d22974bb1ddfe8ad",
       "mode": "0644",
-      "size": 24473,
+      "size": 57310,
       "install": false
     },
     {
       "source": "bin/monitor.py",
       "destination": "bin/monitor.py",
-      "sha256": "c0dcbffbae95a4e8b6c124988f56668ef923b0590e240cf1391012139795a9e2",
+      "sha256": "b0c8ba2c67041a101782fe1560ab450ff5ae424c62f9a7263a83edc22f470da1",
       "mode": "0755",
-      "size": 3644,
+      "size": 5868,
       "install": true
     },
     {
       "source": "content/KasugaiCrow.qml",
       "destination": "content/KasugaiCrow.qml",
-      "sha256": "d597c572599572affc8d20e7447db3be8c97c175cecd32f3680967bf4121259d",
+      "sha256": "85d1a3016642001cf79883afd1a316859e1621e936cf59ecf348574b7e0575bc",
       "mode": "0644",
-      "size": 5638,
+      "size": 5864,
       "install": true
     },
     {
       "source": "content/Widget.qml",
       "destination": "content/Widget.qml",
-      "sha256": "f211a9e5bbcdc2dbe4ed0e9f3de408443078027afe743d27f457515a4d855a98",
+      "sha256": "61de72120950b0852fcd1e2cc00c3e502db4cb1a6c012b7cb913c8c8d9013b25",
       "mode": "0644",
-      "size": 2123,
+      "size": 2218,
       "install": true
     },
     {
       "source": "manifest.json",
       "destination": "manifest.json",
-      "sha256": "1fc72d1ce1994f0abc5f279ba25a06d1747e9db80d5c0a53fda55b886c4a025a",
+      "sha256": "14f57fe23b3a34ac3dc0ca804e07bd169184be89c37a6d6df683a422209d3bf1",
       "mode": "0644",
       "size": 1195,
       "install": true
@@ -64,9 +64,9 @@
     {
       "source": "service/Main.qml",
       "destination": "service/Main.qml",
-      "sha256": "06e34f2dcec9d62ebcd493f135bab2c90edb928e7114fe4b72a7455b5223e0e9",
+      "sha256": "2c08013a38b51080c7ca1510f6716ef4560fef070b0f2790abf979edbc34e51a",
       "mode": "0644",
-      "size": 1205,
+      "size": 1543,
       "install": true
     }
   ],

@@ -29,7 +29,7 @@ Item {
     property real _now: Date.now()
     Timer {
         interval: 1000
-        running: true
+        running: root._awake
         repeat: true
         onTriggered: root._now = Date.now()
     }
@@ -47,6 +47,7 @@ Item {
             scale: root.k
             transformOrigin: Item.TopLeft
             mood: root.service ? root.service.mood : ""
+            animated: root._awake || (root.service && root.service.mood === "CRITICAL")
             opacity: root._awake ? 1.0 : 0.8
         }
 

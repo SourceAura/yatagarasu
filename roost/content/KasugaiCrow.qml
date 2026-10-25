@@ -22,6 +22,14 @@ Item {
     // The highest priority on the wire, for the eye:
     // "" (calm) or "CRITICAL".
     property string mood: ""
+    property bool animated: true
+    onAnimatedChanged: {
+        if (!animated) {
+            y = 0
+            _shiver = 0
+            _lid.yScale = 1
+        }
+    }
 
     width: 128
     height: 116
@@ -29,6 +37,7 @@ Item {
     // The breath — a slow ±2px settle, always while she
     // is on the wire.
     SequentialAnimation on y {
+        running: root.animated
         loops: Animation.Infinite
         NumberAnimation { to: 2; duration: 2100; easing.type: Easing.InOutSine }
         NumberAnimation { to: 0; duration: 2100; easing.type: Easing.InOutSine }
@@ -38,7 +47,7 @@ Item {
     // an unacknowledged critical.
     property real _shiver: 0
     SequentialAnimation on _shiver {
-        running: root.mood === "CRITICAL"
+        running: root.animated && root.mood === "CRITICAL"
         loops: Animation.Infinite
         NumberAnimation { to: -1.2; duration: 80 }
         NumberAnimation { to: 1.2; duration: 80 }
@@ -128,7 +137,7 @@ Item {
                 yScale: 1
             }
             SequentialAnimation {
-                running: true
+                running: root.animated
                 loops: Animation.Infinite
                 PauseAnimation { duration: 3400 }
                 NumberAnimation { target: _lid; property: "yScale"; to: 0.08; duration: 70 }

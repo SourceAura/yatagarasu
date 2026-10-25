@@ -2,15 +2,15 @@
   "schema": 1,
   "id": "yatagarasu",
   "category": "notifications",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "destination": "ryoku/notifications/yatagarasu",
   "files": [
     {
       "source": "Card.qml",
       "destination": "Card.qml",
-      "sha256": "4a525ca643a47f41d9f140ae669c9749131bf1cdb3cc501951526853909ba760",
+      "sha256": "5488b95577d85fe3b57342ff6d0655643bcdab1f0312c638559811dd637cad46",
       "mode": "0644",
-      "size": 18155,
+      "size": 18150,
       "install": true
     },
     {
@@ -40,9 +40,9 @@
     {
       "source": "assets/preview.webp",
       "destination": "assets/preview.webp",
-      "sha256": "8ae5be737fc2d460e22c4c07f909d13b71f3594f4b440941e39ea9db1560cedf",
+      "sha256": "ec0e996538c4bd105bf9a4b571fecc00e8980e471032c2132997c4c1d9c7e199",
       "mode": "0644",
-      "size": 7756,
+      "size": 70330,
       "install": false
     },
     {

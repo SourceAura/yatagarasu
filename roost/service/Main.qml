@@ -15,11 +15,20 @@ Item {
 
     property string mood: ""
     property real lastArriveAt: 0
+    readonly property string listenerPath: pluginApi
+        ? String(pluginApi.pluginDir) + "/bin/monitor.py" : ""
+
+    function startMonitor() {
+        if (listenerPath !== "" && !monitor.running)
+            monitor.running = true
+    }
+
+    onListenerPathChanged: Qt.callLater(startMonitor)
+    Component.onCompleted: Qt.callLater(startMonitor)
 
     Process {
         id: monitor
-        command: ["python3", (root.pluginApi ? String(root.pluginApi.pluginDir) : "") + "/bin/monitor.py"]
-        running: true
+        command: ["python3", root.listenerPath]
 
         stdout: SplitParser {
             onRead: line => {
@@ -32,12 +41,15 @@ Item {
                 }
             }
         }
-        onExited: restartTimer.start()
+        onExited: {
+            if (root.listenerPath !== "")
+                restartTimer.restart()
+        }
     }
 
     Timer {
         id: restartTimer
         interval: 4000
-        onTriggered: monitor.running = true
+        onTriggered: root.startMonitor()
     }
 }

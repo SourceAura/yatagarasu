@@ -182,6 +182,12 @@ Item {
 
         HoverHandler { id: _plateHover }
 
+        MouseArea {
+            anchors.fill: parent
+            enabled: root.defaultAction !== null
+            onClicked: root.invokeAndDismiss(root.defaultAction)
+        }
+
         // Priority edge — a lit spine of her own. Left by
         // default, right on a left seat (mirrored above),
         // a crown across the top for the centre column.
@@ -436,9 +442,5 @@ Item {
             opacity: 0.55 + 0.45 * root._flare
         }
 
-        // Clicking the plate runs the sender's default action.
-        TapHandler {
-            onTapped: if (root.defaultAction) root.invokeAndDismiss(root.defaultAction)
-        }
     }
 }

@@ -4,101 +4,159 @@
 # and reports the mood of the moment: the priority of the
 # freshest scroll still standing, or EMPTY when the wire is
 # clear. Speaks on stdout: READY / ARRIVE <P> / MOOD <P|EMPTY>
-import subprocess, sys, re
+import re
+import signal
+import subprocess
+from collections import OrderedDict
 
-stack = {}    # notification id -> priority
-pending = {}  # call serial -> (priority, replaces_id)
+MAX_PENDING = 256
+
+stack = {}
+pending = OrderedDict()
 
 def emit_mood():
     top = ""
-    for v in stack.values():
-        top = v
+    for value in stack.values():
+        top = value
     print("MOOD " + (top if top else "EMPTY"), flush=True)
 
 def prio_of(hints):
     if "x-jurai-priority" in hints:
-        v = str(hints["x-jurai-priority"]).upper()
-        if v in ("LOW", "MEDIUM", "HIGH", "CRITICAL"):
-            return v
+        value = str(hints["x-jurai-priority"]).upper()
+        if value in ("LOW", "MEDIUM", "HIGH", "CRITICAL"):
+            return value
     try:
-        u = int(hints.get("urgency", 1))
-    except Exception:
-        u = 1
-    return "CRITICAL" if u >= 2 else ("LOW" if u <= 0 else "MEDIUM")
+        urgency = int(hints.get("urgency", 1))
+    except (TypeError, ValueError):
+        urgency = 1
+    return "CRITICAL" if urgency >= 2 else ("LOW" if urgency <= 0 else "MEDIUM")
 
 proc = subprocess.Popen(
-    ["dbus-monitor", "interface='org.freedesktop.Notifications'", "type='method_return'"],
-    stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, text=True, bufsize=1)
-print("READY", flush=True)
+    [
+        "dbus-monitor",
+        "type='method_call',interface='org.freedesktop.Notifications',member='Notify',destination='org.freedesktop.Notifications'",
+        "type='signal',interface='org.freedesktop.Notifications',member='NotificationClosed',sender='org.freedesktop.Notifications'",
+        "type='method_return'",
+        "type='error'",
+    ],
+    stdout=subprocess.PIPE,
+    stderr=subprocess.DEVNULL,
+    text=True,
+    bufsize=1,
+)
 
-mode = None        # None | "notify" | "return" | "closed"
+def stop_monitor(_signum, _frame):
+    if proc.poll() is None:
+        proc.terminate()
+    raise SystemExit(0)
+
+signal.signal(signal.SIGINT, stop_monitor)
+signal.signal(signal.SIGTERM, stop_monitor)
+
+mode = None
+sender = None
+destination = None
 serial = None
 reply_serial = None
 body_lines = []
 
 def finish_block():
     global mode
-    if mode == "notify" and serial is not None:
+    if mode == "notify" and sender and serial is not None:
         replaces = 0
         hints = {}
         first_uint = True
-        lines = body_lines
-        for i, ln in enumerate(lines):
-            s = ln.strip()
+        for index, line in enumerate(body_lines):
+            stripped = line.strip()
             if first_uint:
-                m = re.match(r"uint32 (\d+)", s)
-                if m:
-                    replaces = int(m.group(1)); first_uint = False
+                match = re.match(r"uint32 (\d+)", stripped)
+                if match:
+                    replaces = int(match.group(1))
+                    first_uint = False
                     continue
-            m = re.match(r'string "(urgency|x-jurai-priority)"', s)
-            if m and i + 1 < len(lines):
-                vm = re.search(r"variant\s+(?:byte (\d+)|string \"(.*)\")", lines[i + 1])
-                if vm:
-                    hints[m.group(1)] = vm.group(1) if vm.group(1) is not None else vm.group(2)
-        p = prio_of(hints)
-        pending[serial] = (p, replaces)
-        print("ARRIVE " + p, flush=True)
-    elif mode == "return" and reply_serial in pending:
-        p, replaces = pending.pop(reply_serial)
-        for ln in body_lines:
-            m = re.match(r"uint32 (\d+)", ln.strip())
-            if m:
-                nid = int(m.group(1))
-                if replaces:
-                    stack.pop(replaces, None)
-                if nid:
-                    stack[nid] = p
-                    emit_mood()
-                break
+            match = re.match(r'string "(urgency|x-jurai-priority)"', stripped)
+            if match and index + 1 < len(body_lines):
+                value = re.search(
+                    r'variant\s+(?:byte (\d+)|string "(.*)")',
+                    body_lines[index + 1],
+                )
+                if value:
+                    hints[match.group(1)] = (
+                        value.group(1) if value.group(1) is not None else value.group(2)
+                    )
+        priority = prio_of(hints)
+        key = (sender, serial)
+        pending[key] = (priority, replaces)
+        pending.move_to_end(key)
+        while len(pending) > MAX_PENDING:
+            pending.popitem(last=False)
+        print("ARRIVE " + priority, flush=True)
+    elif mode == "return" and destination and reply_serial is not None:
+        result = pending.pop((destination, reply_serial), None)
+        if result:
+            priority, replaces = result
+            for line in body_lines:
+                match = re.match(r"uint32 (\d+)", line.strip())
+                if match:
+                    notification_id = int(match.group(1))
+                    if replaces:
+                        stack.pop(replaces, None)
+                    if notification_id:
+                        stack.pop(notification_id, None)
+                        stack[notification_id] = priority
+                        emit_mood()
+                    break
+    elif mode == "error" and destination and reply_serial is not None:
+        pending.pop((destination, reply_serial), None)
     elif mode == "closed":
-        for ln in body_lines:
-            m = re.match(r"uint32 (\d+)", ln.strip())
-            if m:
-                nid = int(m.group(1))
-                if nid in stack:
-                    del stack[nid]
+        for line in body_lines:
+            match = re.match(r"uint32 (\d+)", line.strip())
+            if match:
+                notification_id = int(match.group(1))
+                if notification_id in stack:
+                    del stack[notification_id]
                     emit_mood()
                 break
     mode = None
 
-for line in proc.stdout:
-    if not line.startswith((" ", "\t")):   # a new message header
-        finish_block()
-        body_lines = []
-        serial = reply_serial = None
-        if line.startswith("method call") and "member=Notify" in line:
-            mode = "notify"
-            m = re.search(r"serial=(\d+)", line)
-            serial = int(m.group(1)) if m else None
-        elif line.startswith("method return"):
-            mode = "return"
-            m = re.search(r"reply_serial=(\d+)", line)
-            reply_serial = int(m.group(1)) if m else None
-        elif line.startswith("signal") and "member=NotificationClosed" in line:
-            mode = "closed"
-        else:
-            mode = None
-    else:
-        if mode:
+print("READY", flush=True)
+try:
+    for line in proc.stdout:
+        if not line.startswith((" ", "\t")):
+            finish_block()
+            body_lines = []
+            sender = destination = None
+            serial = reply_serial = None
+            if line.startswith("method call") and "member=Notify" in line:
+                mode = "notify"
+                match = re.search(r"\bsender=([^\s]+)", line)
+                sender = match.group(1) if match else None
+                match = re.search(r"\bserial=(\d+)", line)
+                serial = int(match.group(1)) if match else None
+            elif line.startswith("method return"):
+                mode = "return"
+                match = re.search(r"\bdestination=([^\s]+)", line)
+                destination = match.group(1) if match else None
+                match = re.search(r"\breply_serial=(\d+)", line)
+                reply_serial = int(match.group(1)) if match else None
+            elif line.startswith("error"):
+                mode = "error"
+                match = re.search(r"\bdestination=([^\s]+)", line)
+                destination = match.group(1) if match else None
+                match = re.search(r"\breply_serial=(\d+)", line)
+                reply_serial = int(match.group(1)) if match else None
+            elif line.startswith("signal") and "member=NotificationClosed" in line:
+                mode = "closed"
+            else:
+                mode = None
+        elif mode:
             body_lines.append(line)
-finish_block()
+    finish_block()
+finally:
+    if proc.poll() is None:
+        proc.terminate()
+        try:
+            proc.wait(timeout=1)
+        except subprocess.TimeoutExpired:
+            proc.kill()
+            proc.wait()
