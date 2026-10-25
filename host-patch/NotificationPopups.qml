@@ -49,6 +49,11 @@ PanelWindow {
     // popup_window_margins (contract 07 sec 8), default 0.
     property real margin: 0
 
+    // Jurai patch: at the BottomRight seat the stack rests above the
+    // roost — the crow stands 116 tall at the corner, and the scrolls
+    // are her voice: they float over her head, never through her.
+    readonly property real roostClearance: position === "BottomRight" ? 112 * win.us : 0
+
     // Base breathing room off the screen corner, on top of the configurable
     // popup margin, so the toast column floats instead of sitting flush.
     readonly property real inset: 16 * win.us
@@ -80,7 +85,7 @@ PanelWindow {
     anchors.left: position === "Left"
     anchors.right: position === "Right" || position === "BottomRight"
     margins.top: inset + margin
-    margins.bottom: inset + margin
+    margins.bottom: inset + margin + roostClearance
     margins.left: inset + margin
     margins.right: inset + margin
 
