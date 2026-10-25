@@ -98,7 +98,7 @@ PanelWindow {
     // The surface is as tall as its cards, but never shorter than a card that is
     // still leaving: the window clips, so collapsing to 1 px under the last toast
     // wiped its exit slide instead of letting it glide off the edge.
-    implicitHeight: lamp + Math.max(1, list.contentHeight, exitFloor)
+    implicitHeight: Math.max(1, list.contentHeight, exitFloor)
     // Height held for a leaving card, released once its exit has finished. This
     // must outlast the whole dismiss: the flicked card slides out over notifOut,
     // then the cards below wait that long and rise over durFastSpatial. Releasing
@@ -185,50 +185,56 @@ PanelWindow {
     }
 
     // Jurai patch: the lamp at the spine's tip — a breathing prism
-    // light at the top of the stack, on her side of the column. It
-    // lives only while the surface is mapped (she is speaking), so
-    // its breath costs nothing in an empty sky.
-    Item {
-        visible: win.lamp > 0
-        anchors.top: parent.top
-        anchors.right: parent.right
-        width: win.lamp
-        height: win.lamp
-
-        Rectangle {
-            anchors.centerIn: parent
-            width: 26 * win.us; height: 26 * win.us; radius: width / 2
-            color: "#A78BFA"
-            opacity: 0.16
-            SequentialAnimation on scale {
-                loops: Animation.Infinite
-                NumberAnimation { to: 1.3; duration: 1800; easing.type: Easing.InOutSine }
-                NumberAnimation { to: 0.9; duration: 1800; easing.type: Easing.InOutSine }
+    // light crowning the stack, on her side of the column. It rides
+    // as the ListView's footer: in the BottomToTop seat the footer
+    // stands beyond the oldest scroll, at the very tip. (A sibling
+    // of the view did not paint in this surface; the view's own
+    // paint path is the reliable seat.)
+    Component {
+        id: lampTip
+        Item {
+            width: ListView.view ? ListView.view.width : 0
+            height: win.lamp
+            Rectangle {
+                anchors.right: parent.right
+                anchors.verticalCenter: parent.verticalCenter
+                width: 26 * win.us; height: 26 * win.us; radius: width / 2
+                color: "#A78BFA"
+                opacity: 0.16
+                SequentialAnimation on scale {
+                    loops: Animation.Infinite
+                    NumberAnimation { to: 1.3; duration: 1800; easing.type: Easing.InOutSine }
+                    NumberAnimation { to: 0.9; duration: 1800; easing.type: Easing.InOutSine }
+                }
             }
-        }
-        Rectangle {
-            anchors.centerIn: parent
-            width: 11 * win.us; height: 11 * win.us; radius: width / 2
-            color: "#22D3EE"
-            opacity: 0.55
-            SequentialAnimation on color {
-                loops: Animation.Infinite
-                ColorAnimation { to: "#A78BFA"; duration: 2200 }
-                ColorAnimation { to: "#F5B300"; duration: 2200 }
-                ColorAnimation { to: "#F43F5E"; duration: 2200 }
-                ColorAnimation { to: "#22D3EE"; duration: 2200 }
+            Rectangle {
+                anchors.right: parent.right
+                anchors.rightMargin: 7.5 * win.us
+                anchors.verticalCenter: parent.verticalCenter
+                width: 11 * win.us; height: 11 * win.us; radius: width / 2
+                color: "#22D3EE"
+                opacity: 0.55
+                SequentialAnimation on color {
+                    loops: Animation.Infinite
+                    ColorAnimation { to: "#A78BFA"; duration: 2200 }
+                    ColorAnimation { to: "#F5B300"; duration: 2200 }
+                    ColorAnimation { to: "#F43F5E"; duration: 2200 }
+                    ColorAnimation { to: "#22D3EE"; duration: 2200 }
+                }
+                SequentialAnimation on opacity {
+                    loops: Animation.Infinite
+                    NumberAnimation { to: 0.9; duration: 1400; easing.type: Easing.InOutSine }
+                    NumberAnimation { to: 0.45; duration: 1400; easing.type: Easing.InOutSine }
+                }
             }
-            SequentialAnimation on opacity {
-                loops: Animation.Infinite
-                NumberAnimation { to: 0.9; duration: 1400; easing.type: Easing.InOutSine }
-                NumberAnimation { to: 0.45; duration: 1400; easing.type: Easing.InOutSine }
+            Rectangle {
+                anchors.right: parent.right
+                anchors.rightMargin: 10.75 * win.us
+                anchors.verticalCenter: parent.verticalCenter
+                width: 4.5 * win.us; height: 4.5 * win.us; radius: width / 2
+                color: "#FFFFFF"
+                opacity: 0.95
             }
-        }
-        Rectangle {
-            anchors.centerIn: parent
-            width: 4.5 * win.us; height: 4.5 * win.us; radius: width / 2
-            color: "#FFFFFF"
-            opacity: 0.95
         }
     }
 
@@ -237,7 +243,6 @@ PanelWindow {
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.topMargin: win.lamp
         height: contentHeight
         spacing: 14 * win.us
         interactive: false
@@ -245,6 +250,9 @@ PanelWindow {
         // roost; the stack rises above her as scrolls arrive.
         verticalLayoutDirection: win.position === "BottomRight" ? ListView.BottomToTop : ListView.TopToBottom
         model: cards
+        // The lamp crowns the spine (BottomToTop: the footer stands
+        // at the tip, beyond the oldest scroll).
+        footer: win.lamp > 0 ? lampTip : null
 
         // Physical dismiss and arrival (contract 12 sec 5, eye-candy pass): a
         // toast is flicked off the edge it lives on rather than fading in place,
