@@ -11,7 +11,7 @@
 # then restarts the shell so it picks up the fresh copies.
 #
 # Expects the sanctioned local-catalogue override (DEVELOP.md §2):
-#   ~/Documents/GitHub/ryostore            the staging clone
+#   ~/Documents/GitHub/ryostore-local            the staging clone
 #   ~/.config/ryoku/ryostore-base          file:// URL of that clone
 # Refuses to run without it — without the override, `ryostore install`
 # would fetch the published catalogue instead of this repo's work.
@@ -22,7 +22,7 @@
 # prove, then transplant the two folders + rows onto fresh PR branches.
 set -euo pipefail
 REPO="$HOME/Documents/GitHub/yatagarasu"
-STAGE="$HOME/Documents/GitHub/ryostore"
+STAGE="$HOME/Documents/GitHub/ryostore-local"
 BASE_FILE="$HOME/.config/ryoku/ryostore-base"
 
 [ -f "$BASE_FILE" ] || { echo "sync-local: no catalogue override at $BASE_FILE — refusing."; exit 1; }
