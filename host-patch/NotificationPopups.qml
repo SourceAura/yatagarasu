@@ -42,7 +42,10 @@ PanelWindow {
     // be offered upstream). The live setting is
     // notifications.notification_position (contract 14, owned by the settings
     // slice); it defaults to Right, the reference default, until that key lands.
-    property string position: "Right"
+    // Jurai patch: the contract-14 feed, landed — position reads the
+    // settings slice (Config.notifications) with Right as the fallback.
+    property string position: Config.notifications && Config.notifications.notification_position
+        ? Config.notifications.notification_position : "Right"
     // popup_window_margins (contract 07 sec 8), default 0.
     property real margin: 0
 
