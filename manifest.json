@@ -2,23 +2,23 @@
   "schema": 1,
   "id": "yatagarasu",
   "category": "notifications",
-  "version": "1.0.0",
+  "version": "1.3.0",
   "destination": "ryoku/notifications/yatagarasu",
   "files": [
     {
       "source": "Card.qml",
       "destination": "Card.qml",
-      "sha256": "f3e742be714d12d0451bf24f6b5f6c9f531a9ab5f1ec17f99804a291ec940b1c",
+      "sha256": "4a525ca643a47f41d9f140ae669c9749131bf1cdb3cc501951526853909ba760",
       "mode": "0644",
-      "size": 10283,
+      "size": 18155,
       "install": true
     },
     {
       "source": "KasugaiCrow.qml",
       "destination": "KasugaiCrow.qml",
-      "sha256": "948fafe4edd39fe3fe80cd1c530c51e947148749e26d55338f5c758b384b5721",
+      "sha256": "d597c572599572affc8d20e7447db3be8c97c175cecd32f3680967bf4121259d",
       "mode": "0644",
-      "size": 5334,
+      "size": 5638,
       "install": true
     },
     {
@@ -32,17 +32,41 @@
     {
       "source": "README.md",
       "destination": "README.md",
-      "sha256": "9eae8472c636f4b4fd7e7683294241bd8e5164141591969492b224db9afa9e1a",
+      "sha256": "a4e3c4cde5799454fade1f1998a7395aff8185b83718f9202f0397b890cff805",
       "mode": "0644",
-      "size": 769,
+      "size": 1867,
       "install": true
     },
     {
       "source": "assets/preview.webp",
       "destination": "assets/preview.webp",
-      "sha256": "e7f5c61a81a7684784db6e1bafef9f6475abb0758b22dc7037b9b3a625a5ceea",
+      "sha256": "8ae5be737fc2d460e22c4c07f909d13b71f3594f4b440941e39ea9db1560cedf",
       "mode": "0644",
-      "size": 17604,
+      "size": 7756,
+      "install": false
+    },
+    {
+      "source": "assets/shot-left.webp",
+      "destination": "assets/shot-left.webp",
+      "sha256": "9db0fe3addfc9c231dd4cf74539bcdcc9395d2f98e364bb880ff93e976268aab",
+      "mode": "0644",
+      "size": 12408,
+      "install": false
+    },
+    {
+      "source": "assets/shot-stack.webp",
+      "destination": "assets/shot-stack.webp",
+      "sha256": "73d928866f3895f40c8e2cd6ce692f7b1f820733607c9454ed647801a4a0c17a",
+      "mode": "0644",
+      "size": 11788,
+      "install": false
+    },
+    {
+      "source": "assets/shot-unfold.webp",
+      "destination": "assets/shot-unfold.webp",
+      "sha256": "025912d3c11750d5421184fc834ed7aba047746654984d36d57396e47b40a05a",
+      "mode": "0644",
+      "size": 16780,
       "install": false
     }
   ],
