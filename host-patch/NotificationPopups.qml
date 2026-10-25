@@ -54,11 +54,6 @@ PanelWindow {
     // are her voice: they float over her head, never through her.
     readonly property real roostClearance: position === "BottomRight" ? 112 * win.us : 0
 
-    // Jurai patch: the lamp — an animated light at the top tip of the
-    // spine the scrolls stem from. Header height reserved for it when
-    // the seat is BottomRight; zero elsewhere.
-    readonly property real lamp: position === "BottomRight" ? 30 * win.us : 0
-
     // Base breathing room off the screen corner, on top of the configurable
     // popup margin, so the toast column floats instead of sitting flush.
     readonly property real inset: 16 * win.us
@@ -184,60 +179,6 @@ PanelWindow {
         onTriggered: if (win.popups.length === 0) win.mapped = false
     }
 
-    // Jurai patch: the lamp at the spine's tip — a breathing prism
-    // light crowning the stack, on her side of the column. It rides
-    // as the ListView's footer: in the BottomToTop seat the footer
-    // stands beyond the oldest scroll, at the very tip. (A sibling
-    // of the view did not paint in this surface; the view's own
-    // paint path is the reliable seat.)
-    Component {
-        id: lampTip
-        Item {
-            width: ListView.view ? ListView.view.width : 0
-            height: win.lamp
-            Rectangle {
-                anchors.right: parent.right
-                anchors.verticalCenter: parent.verticalCenter
-                width: 26 * win.us; height: 26 * win.us; radius: width / 2
-                color: "#A78BFA"
-                opacity: 0.16
-                SequentialAnimation on scale {
-                    loops: Animation.Infinite
-                    NumberAnimation { to: 1.3; duration: 1800; easing.type: Easing.InOutSine }
-                    NumberAnimation { to: 0.9; duration: 1800; easing.type: Easing.InOutSine }
-                }
-            }
-            Rectangle {
-                anchors.right: parent.right
-                anchors.rightMargin: 7.5 * win.us
-                anchors.verticalCenter: parent.verticalCenter
-                width: 11 * win.us; height: 11 * win.us; radius: width / 2
-                color: "#22D3EE"
-                opacity: 0.55
-                SequentialAnimation on color {
-                    loops: Animation.Infinite
-                    ColorAnimation { to: "#A78BFA"; duration: 2200 }
-                    ColorAnimation { to: "#F5B300"; duration: 2200 }
-                    ColorAnimation { to: "#F43F5E"; duration: 2200 }
-                    ColorAnimation { to: "#22D3EE"; duration: 2200 }
-                }
-                SequentialAnimation on opacity {
-                    loops: Animation.Infinite
-                    NumberAnimation { to: 0.9; duration: 1400; easing.type: Easing.InOutSine }
-                    NumberAnimation { to: 0.45; duration: 1400; easing.type: Easing.InOutSine }
-                }
-            }
-            Rectangle {
-                anchors.right: parent.right
-                anchors.rightMargin: 10.75 * win.us
-                anchors.verticalCenter: parent.verticalCenter
-                width: 4.5 * win.us; height: 4.5 * win.us; radius: width / 2
-                color: "#FFFFFF"
-                opacity: 0.95
-            }
-        }
-    }
-
     ListView {
         id: list
         anchors.left: parent.left
@@ -250,9 +191,6 @@ PanelWindow {
         // roost; the stack rises above her as scrolls arrive.
         verticalLayoutDirection: win.position === "BottomRight" ? ListView.BottomToTop : ListView.TopToBottom
         model: cards
-        // The lamp crowns the spine (BottomToTop: the footer stands
-        // at the tip, beyond the oldest scroll).
-        footer: win.lamp > 0 ? lampTip : null
 
         // Physical dismiss and arrival (contract 12 sec 5, eye-candy pass): a
         // toast is flicked off the edge it lives on rather than fading in place,
