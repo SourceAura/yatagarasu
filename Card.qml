@@ -2,14 +2,14 @@
  *
  * The Kasugai scroll, seated as a Ryoku notification card.
  *
- * One scroll per message, as she always carried them: a dark
- * glass plate, a lit priority edge, the sender's seal, the
- * message in mono, and the burn along the foot — the scroll's
- * remaining life, spent while it waits. A CRITICAL scroll
- * does not burn; it waits, ember-lit, for the captain's hand.
- * The ✕ is the acknowledgment. No bird stands on the card —
- * she roosts at the corner of the desktop, and the scrolls
- * rise above her head; her eye wears the last word.
+ * One scroll per message: a dark glass plate, a lit priority
+ * edge, the sender's seal, the message in mono, and the burn
+ * along the foot — the scroll's remaining life, spent while
+ * it waits. A CRITICAL scroll does not burn; it waits,
+ * ember-lit, for the captain's hand. The ✕ is the
+ * acknowledgment. The crow perches at the card's foot, on
+ * the burn wire; the scroll rides above her head and her
+ * eye wears this scroll's priority.
  *
  * Priorities are hers, from the Form Eighty: LOW cyan,
  * MEDIUM emerald, HIGH amber, CRITICAL rose. The freedesktop
@@ -115,6 +115,9 @@ Item {
 
     property bool _expanded: false
 
+    // The perch zone at the card's foot, where the crow sits.
+    readonly property real _perchH: 62 * root.us
+
     Component.onCompleted: root._bornAt = Date.now()
     Component.onDestruction: _burnTimer.stop()
 
@@ -170,7 +173,7 @@ Item {
         id: _plate
         x: root._glitchX
         width: parent.width
-        height: _col.implicitHeight + Tokens.s3 * 2 * root.us
+        height: _col.implicitHeight + Tokens.s3 * root.us + root._perchH
         radius: Tokens.radius * root.us
         color: Qt.rgba(0.02, 0.04, 0.07, 0.88)
         border.color: _plateHover.hovered ? Qt.alpha(root._theme, 0.85)
@@ -401,6 +404,19 @@ Item {
                     }
                 }
             }
+        }
+
+        // The crow, perched on the wire at the foot. Her eye
+        // wears this scroll's priority.
+        KasugaiCrow {
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            anchors.rightMargin: 4 * root.us
+            anchors.bottomMargin: -6 * root.us
+            scale: 0.54 * root.us
+            transformOrigin: Item.BottomRight
+            mood: root._prio
+            calm: Motion.reduce
         }
 
         // Her wire — the card's bottom border, prism-lit in
