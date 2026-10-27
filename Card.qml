@@ -116,7 +116,7 @@ Item {
     property bool _expanded: false
 
     // The perch zone at the card's foot, where the crow sits.
-    readonly property real _perchH: 62 * root.us
+    readonly property real _crowScale: 0.54
 
     Component.onCompleted: root._bornAt = Date.now()
     Component.onDestruction: _burnTimer.stop()
@@ -173,7 +173,7 @@ Item {
         id: _plate
         x: root._glitchX
         width: parent.width
-        height: _col.implicitHeight + Tokens.s3 * root.us + root._perchH
+        height: _col.implicitHeight + Tokens.s3 * root.us
         radius: Tokens.radius * root.us
         color: Qt.rgba(0.02, 0.04, 0.07, 0.88)
         border.color: _plateHover.hovered ? Qt.alpha(root._theme, 0.85)
@@ -352,31 +352,6 @@ Item {
 
             Row {
                 spacing: Tokens.s2 * root.us
-                Text {
-                    text: root._stamp
-                    color: Qt.rgba(1, 1, 1, 0.35)
-                    font.family: Tokens.mono
-                    font.pixelSize: Tokens.fMicro * root.us
-                }
-                Text {
-                    text: root.notification ? String(root.notification.appName || "").toUpperCase() : ""
-                    color: Qt.alpha(root._theme, 0.75)
-                    font.family: Tokens.mono
-                    font.pixelSize: Tokens.fMicro * root.us
-                    font.letterSpacing: 1
-                }
-                Text {
-                    visible: root._prio === "CRITICAL"
-                    text: "ACK REQUIRED"
-                    color: "#F43F5E"
-                    font.family: Tokens.mono
-                    font.pixelSize: Tokens.fMicro * root.us
-                    font.letterSpacing: 1
-                }
-            }
-
-            Row {
-                spacing: Tokens.s2 * root.us
                 visible: root.visibleActions.length > 0
                 Repeater {
                     model: root.visibleActions
@@ -404,19 +379,63 @@ Item {
                     }
                 }
             }
-        }
+            // The foot — one shared line: the stamp at the
+            // left, the crow at the right with her feet on
+            // the burn wire, the stamp riding her eye-line.
+            Row {
+                width: parent.width
+                spacing: Tokens.s2 * root.us
 
-        // The crow, perched on the wire at the foot. Her eye
-        // wears this scroll's priority.
-        KasugaiCrow {
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            anchors.rightMargin: 4 * root.us
-            anchors.bottomMargin: -6 * root.us
-            scale: 0.54 * root.us
-            transformOrigin: Item.BottomRight
-            mood: root._prio
-            calm: Motion.reduce
+                Row {
+                    id: _footStamp
+                    anchors.verticalCenter: parent.verticalCenter
+                    spacing: Tokens.s2 * root.us
+                    Text {
+                        text: root._stamp
+                        color: Qt.rgba(1, 1, 1, 0.35)
+                        font.family: Tokens.mono
+                        font.pixelSize: Tokens.fMicro * root.us
+                    }
+                    Text {
+                        text: root.notification ? String(root.notification.appName || "").toUpperCase() : ""
+                        color: Qt.alpha(root._theme, 0.75)
+                        font.family: Tokens.mono
+                        font.pixelSize: Tokens.fMicro * root.us
+                        font.letterSpacing: 1
+                    }
+                    Text {
+                        visible: root._prio === "CRITICAL"
+                        text: "ACK REQUIRED"
+                        color: "#F43F5E"
+                        font.family: Tokens.mono
+                        font.pixelSize: Tokens.fMicro * root.us
+                        font.letterSpacing: 1
+                    }
+                }
+
+                Item {
+                    width: parent.width - _footStamp.implicitWidth - _perch.width - 2 * Tokens.s2 * root.us
+                    height: 1
+                }
+
+                // Her perch slot — exactly her footprint:
+                // feet at its bottom edge, on the wire.
+                Item {
+                    id: _perch
+                    width: 128 * root._crowScale * root.us
+                    height: 100 * root._crowScale * root.us
+
+                    KasugaiCrow {
+                        anchors.right: parent.right
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: -16 * root._crowScale * root.us
+                        scale: root._crowScale * root.us
+                        transformOrigin: Item.BottomRight
+                        mood: root._prio
+                        calm: Motion.reduce
+                    }
+                }
+            }
         }
 
         // Her wire — the card's bottom border, prism-lit in
