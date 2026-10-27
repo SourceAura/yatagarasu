@@ -200,7 +200,7 @@ Item {
         width: parent.width
         height: (_col.implicitHeight + Tokens.s3 * root.us) * (0.10 + 0.90 * root._open)
         clip: true
-        radius: Tokens.radius * root.us
+        radius: 12 * root.us
         color: Qt.rgba(0.02, 0.04, 0.07, 0.88)
 
         LayoutMirroring.enabled: root._mirrored
@@ -219,6 +219,8 @@ Item {
         // foot, turns the corner at her perch, and climbs.
         Rectangle {
             anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
+            anchors.topMargin: 6 * root.us
+            anchors.bottomMargin: 6 * root.us
             width: 2
             radius: 1
             opacity: _plateHover.hovered ? 1.0 : 0.9
@@ -231,6 +233,8 @@ Item {
         }
         Rectangle {
             anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
+            anchors.leftMargin: 6 * root.us
+            anchors.rightMargin: 6 * root.us
             height: 2
             radius: 1
             opacity: _plateHover.hovered ? 1.0 : 0.9
@@ -478,8 +482,9 @@ Item {
         Rectangle {
             id: _burnWire
             anchors { left: parent.left; bottom: parent.bottom }
+            anchors.leftMargin: 6 * root.us
             height: 2
-            width: parent.width * root._life
+            width: (parent.width - 12 * root.us) * root._life
             color: root._theme
             opacity: root._prio === "CRITICAL" ? 0.8 : 0.55
 
@@ -496,7 +501,7 @@ Item {
         Rectangle {
             visible: root._burns && root._life > 0
             anchors.bottom: parent.bottom
-            x: Math.max(0, _plate.width * root._life - width)
+            x: 6 * root.us + Math.max(0, (_plate.width - 12 * root.us) * root._life - width)
             width: 7 * root.us
             height: 2
             color: root._theme
