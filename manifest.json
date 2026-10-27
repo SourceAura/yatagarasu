@@ -40,33 +40,25 @@
     {
       "source": "assets/preview.webp",
       "destination": "assets/preview.webp",
-      "sha256": "ec0e996538c4bd105bf9a4b571fecc00e8980e471032c2132997c4c1d9c7e199",
+      "sha256": "168daa801c244d8e9118ecd41d026d471b22d087d52ee31af87580d804095c93",
       "mode": "0644",
-      "size": 70330,
-      "install": false
-    },
-    {
-      "source": "assets/shot-left.webp",
-      "destination": "assets/shot-left.webp",
-      "sha256": "9db0fe3addfc9c231dd4cf74539bcdcc9395d2f98e364bb880ff93e976268aab",
-      "mode": "0644",
-      "size": 12408,
+      "size": 123804,
       "install": false
     },
     {
       "source": "assets/shot-stack.webp",
       "destination": "assets/shot-stack.webp",
-      "sha256": "73d928866f3895f40c8e2cd6ce692f7b1f820733607c9454ed647801a4a0c17a",
+      "sha256": "7ec17d169cceebf131a72d5fe69f236f5e38cbf467b31167c0edccf5742602da",
       "mode": "0644",
-      "size": 11788,
+      "size": 84316,
       "install": false
     },
     {
       "source": "assets/shot-unfold.webp",
       "destination": "assets/shot-unfold.webp",
-      "sha256": "025912d3c11750d5421184fc834ed7aba047746654984d36d57396e47b40a05a",
+      "sha256": "7d9bd051578468e2f30a8b816815e40a3776e8737cac000d19531dbe4b86634f",
       "mode": "0644",
-      "size": 16780,
+      "size": 27350,
       "install": false
     }
   ],
