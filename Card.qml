@@ -214,30 +214,31 @@ Item {
             onClicked: root.invokeAndDismiss(root.defaultAction)
         }
 
-        // The frame — two lines only, top and right, and
-        // they carry the prism: a slow spectrum travelling
-        // the top, round the corner, and down the right.
+        // The frame — two lines only, bottom and right,
+        // carrying the prism: the spectrum travels the
+        // foot, turns the corner at her perch, and climbs.
         Rectangle {
-            anchors { left: parent.left; right: parent.right; top: parent.top }
+            anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
+            width: 2
+            radius: 1
+            opacity: _plateHover.hovered ? 1.0 : 0.9
+            gradient: Gradient {
+                orientation: Gradient.Vertical
+                GradientStop { position: 0.0; color: Qt.hsla((root._prism + 0.45) % 1, 0.85, 0.62, 0.9) }
+                GradientStop { position: 0.5; color: Qt.hsla((root._prism + 0.675) % 1, 0.85, 0.62, 0.9) }
+                GradientStop { position: 1.0; color: Qt.hsla((root._prism + 0.9) % 1, 0.85, 0.62, 0.9) }
+            }
+        }
+        Rectangle {
+            anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
             height: 2
             radius: 1
-            opacity: _plateHover.hovered ? 1.0 : 0.8
+            opacity: _plateHover.hovered ? 1.0 : 0.9
             gradient: Gradient {
                 orientation: Gradient.Horizontal
                 GradientStop { position: 0.0; color: Qt.hsla(root._prism % 1, 0.85, 0.62, 0.9) }
                 GradientStop { position: 0.5; color: Qt.hsla((root._prism + 0.45) % 1, 0.85, 0.62, 0.9) }
                 GradientStop { position: 1.0; color: Qt.hsla((root._prism + 0.9) % 1, 0.85, 0.62, 0.9) }
-            }
-        }
-        Rectangle {
-            anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
-            width: 2
-            radius: 1
-            opacity: _plateHover.hovered ? 1.0 : 0.8
-            gradient: Gradient {
-                orientation: Gradient.Vertical
-                GradientStop { position: 0.0; color: Qt.hsla((root._prism + 0.9) % 1, 0.85, 0.62, 0.9) }
-                GradientStop { position: 1.0; color: Qt.hsla((root._prism + 1.35) % 1, 0.85, 0.62, 0.9) }
             }
         }
 
@@ -474,13 +475,6 @@ Item {
         // the priority's colour. It rests full when the
         // scroll does not burn; while it burns, the spend
         // point glows and flares once near the end.
-        Rectangle {
-            anchors { left: parent.left; bottom: parent.bottom }
-            height: 1
-            width: parent.width
-            color: root._theme
-            opacity: 0.35
-        }
         Rectangle {
             id: _burnWire
             anchors { left: parent.left; bottom: parent.bottom }
