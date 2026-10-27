@@ -121,12 +121,6 @@ Item {
     // The unroll: 0 as the scroll lands, 1 once it hangs
     // open. Instant when the user asks for calm.
     property real _open: 0
-    Component.onCompleted: {
-        if (Motion.reduce)
-            root._open = 1;
-        else
-            _openAnim.start();
-    }
     NumberAnimation {
         id: _openAnim
         target: root; property: "_open"
@@ -134,7 +128,13 @@ Item {
         easing.type: Easing.OutCubic
     }
 
-    Component.onCompleted: root._bornAt = Date.now()
+    Component.onCompleted: {
+        root._bornAt = Date.now();
+        if (Motion.reduce)
+            root._open = 1;
+        else
+            _openAnim.start();
+    }
     Component.onDestruction: _burnTimer.stop()
 
     Timer {
