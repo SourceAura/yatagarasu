@@ -124,8 +124,17 @@ Item {
     NumberAnimation {
         id: _openAnim
         target: root; property: "_open"
-        from: 0; to: 1; duration: 340
-        easing.type: Easing.OutCubic
+        from: 0; to: 1; duration: 620
+        easing.type: Easing.OutQuint
+    }
+
+    // The prism drift — the frame's slow colour travel,
+    // stilled when the user asks for calm.
+    property real _prism: 0
+    NumberAnimation on _prism {
+        running: !Motion.reduce
+        loops: Animation.Infinite
+        from: 0; to: 1; duration: 7000
     }
 
     Component.onCompleted: {
@@ -193,9 +202,6 @@ Item {
         clip: true
         radius: Tokens.radius * root.us
         color: Qt.rgba(0.02, 0.04, 0.07, 0.88)
-        border.color: _plateHover.hovered ? Qt.alpha(root._theme, 0.85)
-                                          : Qt.alpha(root._theme, 0.55)
-        border.width: Math.max(1, Tokens.border * root.us)
 
         LayoutMirroring.enabled: root._mirrored
         LayoutMirroring.childrenInherit: true
@@ -208,24 +214,31 @@ Item {
             onClicked: root.invokeAndDismiss(root.defaultAction)
         }
 
-        // Priority edge — a lit spine of her own. Left by
-        // default, right on a left seat (mirrored above),
-        // a crown across the top for the centre column.
+        // The frame — two lines only, top and right, and
+        // they carry the prism: a slow spectrum travelling
+        // the top, round the corner, and down the right.
         Rectangle {
-            visible: !root._centered
-            anchors { left: parent.left; top: parent.top; bottom: parent.bottom }
-            width: 2
-            radius: 1
-            color: root._theme
-            opacity: 0.85
-        }
-        Rectangle {
-            visible: root._centered
             anchors { left: parent.left; right: parent.right; top: parent.top }
             height: 2
             radius: 1
-            color: root._theme
-            opacity: 0.85
+            opacity: _plateHover.hovered ? 1.0 : 0.8
+            gradient: Gradient {
+                orientation: Gradient.Horizontal
+                GradientStop { position: 0.0; color: Qt.hsla(root._prism % 1, 0.85, 0.62, 0.9) }
+                GradientStop { position: 0.5; color: Qt.hsla((root._prism + 0.45) % 1, 0.85, 0.62, 0.9) }
+                GradientStop { position: 1.0; color: Qt.hsla((root._prism + 0.9) % 1, 0.85, 0.62, 0.9) }
+            }
+        }
+        Rectangle {
+            anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
+            width: 2
+            radius: 1
+            opacity: _plateHover.hovered ? 1.0 : 0.8
+            gradient: Gradient {
+                orientation: Gradient.Vertical
+                GradientStop { position: 0.0; color: Qt.hsla((root._prism + 0.9) % 1, 0.85, 0.62, 0.9) }
+                GradientStop { position: 1.0; color: Qt.hsla((root._prism + 1.35) % 1, 0.85, 0.62, 0.9) }
+            }
         }
 
         Column {
@@ -440,7 +453,7 @@ Item {
                 // feet at its bottom edge, on the wire.
                 Item {
                     id: _perch
-                    opacity: root._open < 0.8 ? 0 : (root._open - 0.8) * 5
+                    opacity: root._open < 0.72 ? 0 : (root._open - 0.72) * 3.6
                     width: 128 * root._crowScale * root.us
                     height: 100 * root._crowScale * root.us
 
