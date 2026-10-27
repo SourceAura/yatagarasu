@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-# Yatagarasu Roost — the listener. Watches the session's
-# notification bus from the public square (via dbus-monitor)
-# and reports the mood of the moment: the priority of the
-# freshest scroll still standing, or EMPTY when the wire is
-# clear. Speaks on stdout: READY / ARRIVE <P> / MOOD <P|EMPTY>
+# monitor.py: the Roost listener (retired with the Roost).
+# Watches the session's notification bus via dbus-monitor and
+# reports the priority of the freshest card still standing, or
+# EMPTY when the wire is clear.
+# Speaks on stdout: READY / ARRIVE <P> / MOOD <P|EMPTY>
 import re
 import signal
 import subprocess

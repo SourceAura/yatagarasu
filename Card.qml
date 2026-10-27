@@ -1,31 +1,18 @@
-/* Yatagarasu — Card.qml (v1.4.0)
- *
- * The Kasugai scroll, seated as a Ryoku notification card.
- *
- * One scroll per message: a dark glass plate, the sender's
- * seal, the message in mono, a prism ribbon framing the foot
- * and the right edge, and the burn along the foot — the
- * scroll's remaining life, spent while it waits. The scroll
- * unrolls as it lands. A CRITICAL scroll does not burn; it waits,
- * ember-lit, for the captain's hand. The ✕ is the
- * acknowledgment. The crow perches at the card's foot, on
- * the burn wire; the scroll rides above her head and her
- * eye wears this scroll's priority.
- *
- * Priorities are hers, from the Form Eighty: LOW cyan,
- * MEDIUM emerald, HIGH amber, CRITICAL rose. The freedesktop
- * urgency maps low→LOW, normal→MEDIUM, critical→CRITICAL.
- * HIGH rides the suite dialect: a sender may set the hint
- * "x-jurai-priority" (LOW|MEDIUM|HIGH|CRITICAL) and the
- * scroll obeys it; pair CRITICAL with expire-timeout 0 so
- * the scroll truly waits.
- *
- * The host owns the window, the column, the timers of
- * record, the sounds and the history. This card owns only
- * its face — and follows the house: Tokens for measure,
- * Motion for tempo and calm, the user's own time label.
- */
 pragma ComponentBehavior: Bound
+/* Card.qml: the Yatagarasu notification card.
+ * One card per message: dark glass plate, the sender's icon, the message
+ * in mono, a prism ribbon, and a burn line along the foot that spends the
+ * card's remaining life. A critical card does not burn; it waits. The crow
+ * perches at the card's foot, and her eye wears the card's priority.
+ *
+ * Priorities: LOW cyan, MEDIUM emerald, HIGH amber, CRITICAL rose.
+ * Freedesktop urgency maps low to LOW, normal to MEDIUM, critical to
+ * CRITICAL. A sender may set the hint "x-jurai-priority" (LOW, MEDIUM,
+ * HIGH, CRITICAL) to name the priority directly; pair CRITICAL with
+ * expire-timeout 0 so the card truly waits.
+ *
+ * The host owns the window, the column, timers, sounds, and history.
+ * This card owns only its face. */
 
 import QtQuick
 import QtQuick.Shapes
@@ -41,7 +28,6 @@ Item {
     property string position: "Right"
     property bool showImages: true
 
-    // ── Priority: the hint dialect first, then urgency ──────
     readonly property string _hintPrio: {
         const h = (root.notification && root.notification.hints)
                 ? root.notification.hints : {}
@@ -61,15 +47,11 @@ Item {
                                   : _prio === "LOW"      ? "#22D3EE"
                                                          : "#10D9A3"
 
-    // ── Seat: mirror for the left column, crown for centre ──
     readonly property bool _mirrored: root.position === "Left"
     readonly property bool _centered: root.position === "Center"
 
-    // ── The seal and the picture ────────────────────────────
-    // On this stack the sender's icon rides in `image` as an
-    // image://icon/<name> URL, and a real picture as the same
-    // URL wrapping a path (or a plain path on other stacks).
-    // A bare name is the seal; a path is the picture.
+    // The sender's icon rides in `image` as an image://icon/<name> URL;
+    // a real picture is a path. A bare name is the seal; a path is the picture.
     readonly property string _rawImage: root.notification
         ? String(root.notification.image || "") : ""
     readonly property string _iconSource: {
@@ -87,12 +69,11 @@ Item {
         if (root._rawImage.indexOf("image://icon/") === 0) {
             const rest = root._rawImage.substring("image://icon/".length)
             if (rest.length > 0 && rest.indexOf("/") < 0)
-                return ""   // an icon, not a picture
+                return ""
         }
         return root._rawImage
     }
 
-    // ── Life: the burn, spent honestly ──────────────────────
     property real _bornAt: 0
     property real _elapsed: 0
     readonly property string _stamp: {
@@ -105,8 +86,6 @@ Item {
         const f = 1.0 - (root._elapsed / root.lifespanMs)
         return f < 0 ? 0 : f
     }
-    // The flare: a triangle pulse in the burn's final stretch,
-    // derived from the tick — no extra animation to pay for.
     readonly property real _flare: {
         if (Motion.reduce || !root._burns || root._life <= 0 || root._life > 0.15)
             return 0
@@ -116,11 +95,8 @@ Item {
 
     property bool _expanded: false
 
-    // The perch zone at the card's foot, where the crow sits.
     readonly property real _crowScale: 0.54
 
-    // The unroll: 0 as the scroll lands, 1 once it hangs
-    // open. Instant when the user asks for calm.
     property real _open: 0
     NumberAnimation {
         id: _openAnim
@@ -129,8 +105,6 @@ Item {
         easing.type: Easing.OutQuint
     }
 
-    // The prism drift — the frame's slow colour travel,
-    // stilled when the user asks for calm.
     property real _prism: 0
     NumberAnimation on _prism {
         running: !Motion.reduce
@@ -138,8 +112,6 @@ Item {
         from: 0; to: 1; duration: 7000
     }
 
-    // The frame's ribbon: one band hugging the foot and
-    // the right edge, bending with the corners.
     readonly property string _framePath: {
         const u = root.us, r = 12 * u, ri = r - 2 * u, T = 34 * u;
         const W = _plate.width, H = _plate.height;
@@ -207,8 +179,6 @@ Item {
 
     implicitHeight: _plate.height
 
-    // The critical glitch — a 1px shiver, her intel-shake.
-    // Calm when the user asks for calm.
     property real _glitchX: 0
     SequentialAnimation on _glitchX {
         running: root._prio === "CRITICAL" && !Motion.reduce
@@ -239,8 +209,6 @@ Item {
             onClicked: root.invokeAndDismiss(root.defaultAction)
         }
 
-        // The frame — one prism ribbon along the foot and
-        // the right edge, bending with the corners.
         Shape {
             anchors.fill: parent
             preferredRendererType: Shape.CurveRenderer
@@ -272,8 +240,6 @@ Item {
                 width: parent.width
                 spacing: Tokens.s2 * root.us
 
-                // The seal: the sender's icon in a tinted
-                // medallion; her diamond when none rides.
                 Rectangle {
                     width: 24 * root.us
                     height: 24 * root.us
@@ -320,8 +286,6 @@ Item {
                     font.letterSpacing: 1.2
                     anchors.verticalCenter: parent.verticalCenter
                 }
-                // The acknowledgment — a full-size target,
-                // a small glyph. Dismisses; never invokes.
                 Item {
                     width: 26 * root.us
                     height: 26 * root.us
@@ -353,14 +317,7 @@ Item {
                 elide: root._expanded ? Text.ElideNone : Text.ElideRight
             }
 
-            // The picture, when one rides and the user
-            // allows pictures: framed in her colour, and
-            // no hole in the scroll when it is absent.
             Rectangle {
-                // The frame is reserved the moment a picture
-                // is known to ride — the scroll never grows
-                // after it lands; the picture fades in inside
-                // its frame when it is ready.
                 width: parent.width
                 height: root._expanded ? 220 * root.us : 92 * root.us
                 visible: root._imageSource.length > 0 && _pic.status !== Image.Error
@@ -381,8 +338,6 @@ Item {
                 }
             }
 
-            // The unfold — offered only when the scroll is
-            // truly clipped; state lives and dies here.
             Row {
                 width: parent.width
                 visible: (_bodyText.truncated && !root._expanded) || root._expanded
@@ -428,9 +383,6 @@ Item {
                     }
                 }
             }
-            // The foot — one shared line: the stamp at the
-            // left, the crow at the right with her feet on
-            // the burn wire, the stamp riding her eye-line.
             Row {
                 width: parent.width
                 spacing: Tokens.s2 * root.us
@@ -467,8 +419,6 @@ Item {
                     height: 1
                 }
 
-                // Her perch slot — exactly her footprint:
-                // feet at its bottom edge, on the wire.
                 Item {
                     id: _perch
                     opacity: root._open < 0.72 ? 0 : (root._open - 0.72) * 3.6
@@ -488,10 +438,6 @@ Item {
             }
         }
 
-        // Her wire — the card's bottom border, prism-lit in
-        // the priority's colour. It rests full when the
-        // scroll does not burn; while it burns, the spend
-        // point glows and flares once near the end.
         Rectangle {
             id: _burnWire
             anchors { left: parent.left; bottom: parent.bottom }
@@ -501,7 +447,6 @@ Item {
             color: root._theme
             opacity: root._prio === "CRITICAL" ? 0.8 : 0.55
 
-            // The ember breath of a waiting critical.
             SequentialAnimation on opacity {
                 running: root._prio === "CRITICAL" && !Motion.reduce
                 loops: Animation.Infinite
@@ -509,8 +454,6 @@ Item {
                 NumberAnimation { to: 0.65; duration: 1200; easing.type: Easing.InOutSine }
             }
         }
-        // The spend point — the bright head where the burn
-        // is being spent, flaring in the final seconds.
         Rectangle {
             visible: root._burns && root._life > 0
             anchors.bottom: parent.bottom

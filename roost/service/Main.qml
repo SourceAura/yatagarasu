@@ -1,10 +1,8 @@
-/* Yatagarasu Roost — the service.
- * Persistent and non-visual: runs her listener on the
- * notification bus and holds the mood of the moment — the
- * priority of the freshest scroll still standing, "" when
- * the wire is clear. The listener is hers alone (bin/
- * monitor.py); if it ever falls, she sends it out again.
- */
+/* Main.qml: the Roost service.
+ * Persistent and non-visual: runs the notification bus listener
+ * (bin/monitor.py) and holds the mood of the moment, the priority
+ * of the freshest card still standing, or empty when clear. */
+
 import QtQuick
 import Quickshell.Io
 

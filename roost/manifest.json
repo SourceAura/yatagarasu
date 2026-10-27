@@ -6,7 +6,7 @@
   "destination": "ryoku/plugins/yatagarasu-roost",
   "name": "Yatagarasu Roost",
   "author": "0xSrcAura",
-  "description": "The Kasugai crow herself, roosting on your desktop. Her eye wears the colour of the last notification \u2014 LOW cyan, MEDIUM emerald, HIGH amber, CRITICAL rose \u2014 fed by her own listener on the notification bus. The other half of Yatagarasu: the notification design is her voice; this is her.",
+  "description": "The Kasugai crow, roosting on your desktop. Her eye wears the colour of the last notification (LOW cyan, MEDIUM emerald, HIGH amber, CRITICAL rose), fed by her own listener on the notification bus. Companion to the Yatagarasu notification design.",
   "license": "GPL-3.0-or-later",
   "tags": [
     "desktop-widget",

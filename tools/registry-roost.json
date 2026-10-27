@@ -4,8 +4,8 @@
  "path": "plugins/yatagarasu-roost",
  "author": "0xSrcAura",
  "upstream": "https://github.com/SourceAura/yatagarasu",
- "summary": "The Kasugai crow on your desktop \u2014 her eye wears the last notification's colour.",
- "description": "The other half of Yatagarasu: the crow herself, roosting on the desktop on her prism wire. Her own listener watches the session's notification bus and her eye wears the freshest word \u2014 LOW cyan, MEDIUM emerald, HIGH amber, CRITICAL rose, the calm prism when the wire is clear. Companion to the Yatagarasu notification design, whose scrolls are her voice.",
+ "summary": "The Kasugai crow on your desktop: her eye wears the last notification's colour.",
+ "description": "The crow herself, roosting on the desktop on her prism wire. Her own listener watches the session's notification bus, and her eye wears the freshest priority (LOW cyan, MEDIUM emerald, HIGH amber, CRITICAL rose), or the calm prism when the wire is clear. Companion to the Yatagarasu notification design.",
  "tagline": "The Kasugai crow on your desktop \u2014 her eye wears the last notification's colour.",
  "tags": [
   "desktop-widget",

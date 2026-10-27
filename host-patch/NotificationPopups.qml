@@ -37,12 +37,12 @@ PanelWindow {
 
     // Popup anchoring (contract 07 sec 7): Left -> top+left, Right (default) ->
     // top+right, Center -> top only (horizontally centred). BottomRight ->
-    // bottom+right (Jurai patch, 2026-10-25: the Kasugai seat — the stack
+    // bottom+right (Jurai patch, 2026-10-25: the Kasugai seat. The stack
     // rises from the bottom-right corner, newest at the corner; written to
     // be offered upstream). The live setting is
     // notifications.notification_position (contract 14, owned by the settings
     // slice); it defaults to Right, the reference default, until that key lands.
-    // Jurai patch: the contract-14 feed, landed — position reads the
+    // Jurai patch: the contract-14 feed, landed. Position reads the
     // settings slice (Config.notifications) with Right as the fallback.
     property string position: Config.notifications && Config.notifications.notification_position
         ? Config.notifications.notification_position : "Right"
@@ -50,7 +50,7 @@ PanelWindow {
     property real margin: 0
 
     // Jurai patch: at the BottomRight seat the stack rests above the
-    // roost — the crow stands 116 tall at the corner, and the scrolls
+    // roost: the crow stands 116 tall at the corner, and the scrolls
     // are her voice: they float over her head, never through her.
     readonly property real roostClearance: position === "BottomRight" ? 112 * win.us : 0
 

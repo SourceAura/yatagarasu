@@ -6,7 +6,7 @@
  "author": "0xSrcAura",
  "upstream": "https://github.com/SourceAura/yatagarasu",
  "summary": "Kasugai crow dispatch-scroll notification card",
- "description": "Each notification arrives as a Kasugai dispatch scroll: a dark glass plate with a lit priority edge (LOW cyan, MEDIUM emerald, HIGH amber, CRITICAL rose), the sender's seal, the message in mono, and a burn line along the foot that spends the scroll's remaining life \u2014 a critical does not burn; it waits, ember-lit, with ACK REQUIRED until acknowledged. Pictures ride framed in the scroll, long messages unfold in place, the card mirrors for the left column and crowns for the centre, and a sender may speak all four priorities through the x-jurai-priority hint. No crow stands on the card: she roosts at the desktop's corner, and the scrolls are her voice.",
+ "description": "Each notification arrives as a Kasugai dispatch scroll: a dark glass plate with a lit priority edge (LOW cyan, MEDIUM emerald, HIGH amber, CRITICAL rose), the sender's icon, the message in mono, and a burn line along the foot that spends the card's remaining life. A critical card does not burn; it waits, marked ACK REQUIRED, until acknowledged. Pictures ride framed in the card, long messages unfold in place, the card mirrors for the left column and centres for the middle column, and a sender may set any of the four priorities through the x-jurai-priority hint.",
  "tags": [
   "crow",
   "scroll",

@@ -1,10 +1,7 @@
-/* Yatagarasu Roost — the content.
- * The crow herself on the desktop, standing on her prism
- * wire. Her eye is bound to the service's mood: the colour
- * of the last word the wire carried. She brightens when a
- * fresh scroll lands and settles as it ages.
- */
 pragma ComponentBehavior: Bound
+/* Widget.qml: the Roost on the desktop.
+ * The crow on her prism wire. Her eye is bound to the service's
+ * mood: the priority of the freshest card still standing. */
 
 import QtQuick
 import Ryoku.PluginKit
@@ -51,7 +48,6 @@ Item {
             opacity: root._awake ? 1.0 : 0.8
         }
 
-        // Her wire — the prism line she stands on.
         Rectangle {
             anchors.bottom: parent.bottom
             width: parent.width

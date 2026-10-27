@@ -1,32 +1,19 @@
 #!/usr/bin/env bash
-# sync-local.sh — make THIS machine's installed Yatagarasu match this repo.
-#
-# The repo (SourceAura/yatagarasu) is the source of truth. This script
-# carries it the last mile on a development machine:
-#   design: repo files + registry row -> local ryostore staging clone
-#           -> pack -> reinstall via the file:// catalogue override
-#   roost:  repo/roost + registry row -> staging clone -> pack
-#           -> ryoku plugin re-add (+ reseeds the enable entry,
-#           which `plugin remove` drops)
-# then restarts the shell so it picks up the fresh copies.
-#
-# Expects the sanctioned local-catalogue override (DEVELOP.md §2):
-#   ~/Documents/GitHub/ryostore-local            the staging clone
-#   ~/.config/ryoku/ryostore-base          file:// URL of that clone
-# Refuses to run without it — without the override, `ryostore install`
-# would fetch the published catalogue instead of this repo's work.
-#
-# Releasing to other users is a separate step (the catalogue only moves
-# by PR): bump the version — design: tools/registry-design.json;
-# roost: roost/manifest.json AND tools/registry-roost.json — sync,
-# prove, then transplant the two folders + rows onto fresh PR branches.
+# sync-local.sh: make this machine's installed Yatagarasu match this repo.
+# The repo is the source of truth. The script seats the design and the
+# roost through the local catalogue tree (~/Documents/GitHub/ryostore-local,
+# reached by the file:// override in ~/.config/ryoku/ryostore-base), then
+# restarts the shell. It refuses to run without the override: without it,
+# ryostore install would fetch the published catalogue instead.
+# Releasing is a separate step: bump the version (design:
+# tools/registry-design.json; roost: tools/registry-roost.json), then a PR.
 set -euo pipefail
 REPO="$HOME/Documents/GitHub/yatagarasu"
 STAGE="$HOME/Documents/GitHub/ryostore-local"
 BASE_FILE="$HOME/.config/ryoku/ryostore-base"
 
-[ -f "$BASE_FILE" ] || { echo "sync-local: no catalogue override at $BASE_FILE — refusing."; exit 1; }
-grep -q "$STAGE" "$BASE_FILE" || { echo "sync-local: override does not point at $STAGE — refusing."; exit 1; }
+[ -f "$BASE_FILE" ] || { echo "sync-local: no catalogue override at $BASE_FILE: refusing."; exit 1; }
+grep -q "$STAGE" "$BASE_FILE" || { echo "sync-local: override does not point at $STAGE: refusing."; exit 1; }
 
 merge_row() {
   python3 - "$1" "$2" "$3" "$4" <<'PY'
@@ -78,4 +65,4 @@ print("roost enable entry reseeded")
 PY
 
 systemctl --user restart ryoku-shell
-echo "sync-local: done — shell restarted on the repo's current truth."
+echo "sync-local: done. Shell restarted on the repo's current truth."
