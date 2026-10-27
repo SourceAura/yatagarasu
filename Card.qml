@@ -137,6 +137,28 @@ Item {
         from: 0; to: 1; duration: 7000
     }
 
+    // The frame's ribbon: one band hugging the foot and
+    // the right edge, bending with the corners.
+    readonly property string _framePath: {
+        const u = root.us, r = 12 * u, ri = r - 2 * u;
+        const W = _plate.width, H = _plate.height;
+        if (W < 3 * r || H < 3 * r)
+            return "";
+        return "M 0 " + (H - r) +
+               " A " + r + " " + r + " 0 0 0 " + r + " " + H +
+               " L " + (W - r) + " " + H +
+               " A " + r + " " + r + " 0 0 0 " + W + " " + (H - r) +
+               " L " + W + " " + r +
+               " A " + r + " " + r + " 0 0 0 " + (W - r) + " 0" +
+               " L " + (W - r) + " " + (2 * u) +
+               " A " + ri + " " + ri + " 0 0 1 " + (W - 2 * u) + " " + r +
+               " L " + (W - 2 * u) + " " + (H - r) +
+               " A " + ri + " " + ri + " 0 0 1 " + (W - r) + " " + (H - 2 * u) +
+               " L " + r + " " + (H - 2 * u) +
+               " A " + ri + " " + ri + " 0 0 1 " + (2 * u) + " " + (H - r) +
+               " Z";
+    }
+
     Component.onCompleted: {
         root._bornAt = Date.now();
         if (Motion.reduce)
@@ -214,35 +236,20 @@ Item {
             onClicked: root.invokeAndDismiss(root.defaultAction)
         }
 
-        // The frame — two lines only, bottom and right,
-        // carrying the prism: the spectrum travels the
-        // foot, turns the corner at her perch, and climbs.
-        Rectangle {
-            anchors { right: parent.right; top: parent.top; bottom: parent.bottom }
-            anchors.topMargin: 6 * root.us
-            anchors.bottomMargin: 6 * root.us
-            width: 2
-            radius: 1
+        // The frame — one prism ribbon along the foot and
+        // the right edge, bending with the corners.
+        Shape {
+            anchors.fill: parent
             opacity: _plateHover.hovered ? 1.0 : 0.9
-            gradient: Gradient {
-                orientation: Gradient.Vertical
-                GradientStop { position: 0.0; color: Qt.hsla((root._prism + 0.45) % 1, 0.85, 0.62, 0.9) }
-                GradientStop { position: 0.5; color: Qt.hsla((root._prism + 0.675) % 1, 0.85, 0.62, 0.9) }
-                GradientStop { position: 1.0; color: Qt.hsla((root._prism + 0.9) % 1, 0.85, 0.62, 0.9) }
-            }
-        }
-        Rectangle {
-            anchors { left: parent.left; right: parent.right; bottom: parent.bottom }
-            anchors.leftMargin: 6 * root.us
-            anchors.rightMargin: 6 * root.us
-            height: 2
-            radius: 1
-            opacity: _plateHover.hovered ? 1.0 : 0.9
-            gradient: Gradient {
-                orientation: Gradient.Horizontal
-                GradientStop { position: 0.0; color: Qt.hsla(root._prism % 1, 0.85, 0.62, 0.9) }
-                GradientStop { position: 0.5; color: Qt.hsla((root._prism + 0.45) % 1, 0.85, 0.62, 0.9) }
-                GradientStop { position: 1.0; color: Qt.hsla((root._prism + 0.9) % 1, 0.85, 0.62, 0.9) }
+            ShapePath {
+                fillGradient: LinearGradient {
+                    x1: 0; y1: _plate.height
+                    x2: _plate.width; y2: 0
+                    GradientStop { position: 0.0; color: Qt.hsla(root._prism % 1, 0.85, 0.62, 0.9) }
+                    GradientStop { position: 0.5; color: Qt.hsla((root._prism + 0.5) % 1, 0.85, 0.62, 0.9) }
+                    GradientStop { position: 1.0; color: Qt.hsla((root._prism + 1.0) % 1, 0.85, 0.62, 0.9) }
+                }
+                PathSvg { path: root._framePath }
             }
         }
 
