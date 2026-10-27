@@ -242,14 +242,17 @@ Item {
         // the right edge, bending with the corners.
         Shape {
             anchors.fill: parent
+            preferredRendererType: Shape.CurveRenderer
             opacity: _plateHover.hovered ? 1.0 : 0.9
             ShapePath {
                 fillGradient: LinearGradient {
                     x1: 0; y1: _plate.height
                     x2: _plate.width; y2: 0
-                    GradientStop { position: 0.0; color: Qt.hsla(root._prism % 1, 0.85, 0.62, 0.45) }
-                    GradientStop { position: 0.5; color: Qt.hsla((root._prism + 0.5) % 1, 0.85, 0.62, 0.9) }
-                    GradientStop { position: 1.0; color: Qt.hsla((root._prism + 1.0) % 1, 0.85, 0.62, 0.45) }
+                    GradientStop { position: 0.0; color: Qt.hsla(0.78, 0.85, 0.62, 0.35) }
+                    GradientStop { position: 0.3; color: Qt.hsla((root._prism + 0.15) % 1, 0.85, 0.62, 0.9) }
+                    GradientStop { position: 0.55; color: Qt.hsla((root._prism + 0.45) % 1, 0.85, 0.62, 0.9) }
+                    GradientStop { position: 0.8; color: Qt.hsla((root._prism + 0.75) % 1, 0.85, 0.62, 0.9) }
+                    GradientStop { position: 1.0; color: Qt.hsla(0.52, 0.85, 0.62, 0.35) }
                 }
                 PathSvg { path: root._framePath }
             }
