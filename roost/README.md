@@ -1,10 +1,16 @@
 # Yatagarasu Roost
 
+> **Retired.** The crow lives in the notification card now —
+> see the Yatagarasu README one folder up. This piece is no
+> longer listed or maintained; the folder stays for reference.
+
 The crow herself, roosting on your desktop.
 
-Yatagarasu is two listings under one name: the notification
+What follows is the Roost's own README, as it stood.
+
+Yatagarasu was two listings under one name: the notification
 design is her voice — every message a dispatch scroll — and
-this plugin is **her**. She stands on her prism wire on the
+this plugin was **her**. She stands on her prism wire on the
 desktop, and her eye wears the colour of the last word the
 wire carried: LOW cyan, MEDIUM emerald, HIGH amber, CRITICAL
 rose; the calm prism when the wire is clear.

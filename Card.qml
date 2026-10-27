@@ -1,11 +1,12 @@
-/* Yatagarasu — Card.qml (v1.3.0)
+/* Yatagarasu — Card.qml (v1.4.0)
  *
  * The Kasugai scroll, seated as a Ryoku notification card.
  *
- * One scroll per message: a dark glass plate, a lit priority
- * edge, the sender's seal, the message in mono, and the burn
- * along the foot — the scroll's remaining life, spent while
- * it waits. A CRITICAL scroll does not burn; it waits,
+ * One scroll per message: a dark glass plate, the sender's
+ * seal, the message in mono, a prism ribbon framing the foot
+ * and the right edge, and the burn along the foot — the
+ * scroll's remaining life, spent while it waits. The scroll
+ * unrolls as it lands. A CRITICAL scroll does not burn; it waits,
  * ember-lit, for the captain's hand. The ✕ is the
  * acknowledgment. The crow perches at the card's foot, on
  * the burn wire; the scroll rides above her head and her
