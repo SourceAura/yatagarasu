@@ -118,6 +118,22 @@ Item {
     // The perch zone at the card's foot, where the crow sits.
     readonly property real _crowScale: 0.54
 
+    // The unroll: 0 as the scroll lands, 1 once it hangs
+    // open. Instant when the user asks for calm.
+    property real _open: 0
+    Component.onCompleted: {
+        if (Motion.reduce)
+            root._open = 1;
+        else
+            _openAnim.start();
+    }
+    NumberAnimation {
+        id: _openAnim
+        target: root; property: "_open"
+        from: 0; to: 1; duration: 340
+        easing.type: Easing.OutCubic
+    }
+
     Component.onCompleted: root._bornAt = Date.now()
     Component.onDestruction: _burnTimer.stop()
 
@@ -173,7 +189,8 @@ Item {
         id: _plate
         x: root._glitchX
         width: parent.width
-        height: _col.implicitHeight + Tokens.s3 * root.us
+        height: (_col.implicitHeight + Tokens.s3 * root.us) * (0.10 + 0.90 * root._open)
+        clip: true
         radius: Tokens.radius * root.us
         color: Qt.rgba(0.02, 0.04, 0.07, 0.88)
         border.color: _plateHover.hovered ? Qt.alpha(root._theme, 0.85)
@@ -213,6 +230,7 @@ Item {
 
         Column {
             id: _col
+            opacity: 0.3 + 0.7 * root._open
             anchors { left: parent.left; right: parent.right; top: parent.top }
             anchors.leftMargin: Tokens.s3 * root.us
             anchors.rightMargin: Tokens.s3 * root.us
@@ -422,6 +440,7 @@ Item {
                 // feet at its bottom edge, on the wire.
                 Item {
                     id: _perch
+                    opacity: root._open < 0.8 ? 0 : (root._open - 0.8) * 5
                     width: 128 * root._crowScale * root.us
                     height: 100 * root._crowScale * root.us
 
