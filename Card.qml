@@ -140,16 +140,18 @@ Item {
     // The frame's ribbon: one band hugging the foot and
     // the right edge, bending with the corners.
     readonly property string _framePath: {
-        const u = root.us, r = 12 * u, ri = r - 2 * u;
+        const u = root.us, r = 12 * u, ri = r - 2 * u, T = 34 * u;
         const W = _plate.width, H = _plate.height;
-        if (W < 3 * r || H < 3 * r)
+        if (W < 3 * r + T || H < r + T + 12 * u)
             return "";
-        return "M 0 " + (H - r) +
+        return "M 0 " + (H - r - T) +
+               " L 0 " + (H - r) +
                " A " + r + " " + r + " 0 0 0 " + r + " " + H +
                " L " + (W - r) + " " + H +
                " A " + r + " " + r + " 0 0 0 " + W + " " + (H - r) +
                " L " + W + " " + r +
                " A " + r + " " + r + " 0 0 0 " + (W - r) + " 0" +
+               " L " + (W - r - T) + " 0" +
                " L " + (W - r) + " " + (2 * u) +
                " A " + ri + " " + ri + " 0 0 1 " + (W - 2 * u) + " " + r +
                " L " + (W - 2 * u) + " " + (H - r) +
@@ -245,9 +247,9 @@ Item {
                 fillGradient: LinearGradient {
                     x1: 0; y1: _plate.height
                     x2: _plate.width; y2: 0
-                    GradientStop { position: 0.0; color: Qt.hsla(root._prism % 1, 0.85, 0.62, 0.9) }
+                    GradientStop { position: 0.0; color: Qt.hsla(root._prism % 1, 0.85, 0.62, 0.45) }
                     GradientStop { position: 0.5; color: Qt.hsla((root._prism + 0.5) % 1, 0.85, 0.62, 0.9) }
-                    GradientStop { position: 1.0; color: Qt.hsla((root._prism + 1.0) % 1, 0.85, 0.62, 0.9) }
+                    GradientStop { position: 1.0; color: Qt.hsla((root._prism + 1.0) % 1, 0.85, 0.62, 0.45) }
                 }
                 PathSvg { path: root._framePath }
             }
